@@ -37,4 +37,10 @@ else
     #modify the netlist
     sky130_pnp_mod ./ext/"$name".spice
     sed -i 's/\[/_/g;s/\]/_/g' ./ext/"$name".spice
+    # remove .subckt header and change .ends to .end
+    sed -i '/\.subckt/d' ./ext/"$name".spice
+    sed -i '/^\+ /d' ./ext/"$name".spice
+    sed -i 's/\.ends/\.end/g' ./ext/"$name".spice
+
+
 fi
