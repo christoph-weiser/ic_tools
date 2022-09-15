@@ -16,6 +16,20 @@ For example if you're in the ic_tools repository:
 export IC_TOOLS="$(pwd)"
 ```
 
+Additionally the tools can be added to the PATH variable
+and therefore be used as commandline tools. 
+
+create symlinks to all tools:
+```
+chmod +x ./make.sh
+./make.sh
+
+Then the tools can be added to the PATH variable:
+
+```
+export PATH=$PATH:$IC_TOOLS/bin
+```
+
 For more information about the application of each tool 
 refer to the note at the top of each script.
 
