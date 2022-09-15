@@ -18,4 +18,4 @@ filename="$2"
 
 [[ -z "$2" ]] && echo "prefix.sh prefix file" && exit
 
-$HOME/Programme/klayout/klayout -z -r "$script" -rd prefix="$prefix" -rd filename="$filename"
+klayout -z -r "$script" -rd prefix="$prefix" -rd filename="$filename"
