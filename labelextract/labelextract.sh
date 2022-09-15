@@ -7,7 +7,7 @@
 #       labelextract.sh file
 #
 # DESCRIPTION
-#       use klayout to extract the top-level lavels of 
+#       use klayout to extract the top-level labels of 
 #       the input file.
 #      
 #

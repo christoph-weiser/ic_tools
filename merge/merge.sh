@@ -7,7 +7,7 @@
 #       merge.sh file_a file_b
 #
 # DESCRIPTION
-#       use klayout to merge to gds files
+#       use klayout to merge two gds files
 #
 #------------------------------------------------------------
 
