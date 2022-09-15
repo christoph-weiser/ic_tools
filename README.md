@@ -10,6 +10,8 @@ included in your path if you want to run them.
 Also export a environment variable called IC_TOOLS that points
 to this repository.
 
+For example if you're in the ic_tools repository: 
+
 ```
 export IC_TOOLS="$(pwd)"
 ```
