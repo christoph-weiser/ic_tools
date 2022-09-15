@@ -23,9 +23,9 @@ create symlinks to all tools:
 ```
 chmod +x ./make.sh
 ./make.sh
+```
 
 Then the tools can be added to the PATH variable:
-
 ```
 export PATH=$PATH:$IC_TOOLS/bin
 ```
