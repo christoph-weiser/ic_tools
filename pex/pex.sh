@@ -38,10 +38,11 @@ load $topcell
 select top cell
 extract all
 ext2spice format ngspice
-ext2spice subcircuit on
-ext2spice subcircuit top off
-ext2spice hierarchy on
 ext2spice scale off
 ext2spice
 quit -noprompt
 EOF
+
+# ext2spice subcircuit on
+# ext2spice subcircuit top off
+# ext2spice hierarchy on
