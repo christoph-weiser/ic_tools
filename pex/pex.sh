@@ -32,17 +32,32 @@ mkdir "$DIRNAME"
 
 cd "$DIRNAME"
 
+# RC Pex
 magic -dnull -noconsole << EOF
 gds read "../$gdsfile"
 load $topcell
 select top cell
+flatten $topcell
+load $topcell
 extract all
-ext2spice format ngspice
-ext2spice scale off
+ext2sim labels on
+ext2sim
+extresist tolerance 10
+extresist
+ext2spice lvs
+ext2spice cthresh 1
+ext2spice extresist on
 ext2spice
-quit -noprompt
 EOF
 
-# ext2spice subcircuit on
-# ext2spice subcircuit top off
-# ext2spice hierarchy on
+# CC Pex
+# magic -dnull -noconsole << EOF
+# gds read "../$gdsfile"
+# load $topcell
+# select top cell
+# extract all
+# ext2spice format ngspice
+# ext2spice scale off
+# ext2spice
+# quit -noprompt
+# EOF
