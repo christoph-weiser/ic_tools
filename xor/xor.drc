@@ -1,0 +1,22 @@
+# XOR using Klayout DRC engine
+
+# Input and Output
+a = source($filename_a)
+b = source($filename_b)
+outname = target($outname, "XOR")
+
+# Get all the common layers
+layers = {}
+[ a.layout, b.layout ].each do |ly|
+  ly.layer_indices.each do |li|
+    i = ly.get_info(li)
+    layers[i.to_s] = i
+  end
+end
+
+# Perform XOR on all layers
+layers.keys.sort.each do |l|
+  i = layers[l]
+  x = a.input(l) ^ b.input(l)
+  $outname && x.output(i.layer, i.datatype, i.name)
+end 
