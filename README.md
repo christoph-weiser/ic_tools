@@ -50,6 +50,7 @@ refer to the note at the top of each script.
 - prefix            - add prefix to each cell name in gds.
 - sky130_pnp_mod    - change extracted pnp devices to fit models.
 - topcell           - create a top-cell from hierachical gds.
+- xor               - calculate the xor between two layouts
 
 
 
