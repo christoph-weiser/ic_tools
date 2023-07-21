@@ -1,0 +1,22 @@
+mw = RBA::Application::instance.main_window
+mw.menu.insert_separator("zoom_menu.end", "pan_functions")
+
+{ "up" => "K", "left" => "H", "right" => "L", "down" => "J" }.each do |k,v|
+  a = RBA::Action::new
+  a.title = "Pan " + k
+  a.shortcut = v
+  a.on_triggered do
+    mw.instance_eval("cm_pan_" + k) 
+  end
+  mw.menu.insert_item("zoom_menu.end", "pan_" + k, a)
+end
+
+{ "in" => "+", "out" => "-" }.each do |k,v|
+  a = RBA::Action::new
+  a.title = "Zoom " + k
+  a.shortcut = v
+  a.on_triggered do
+    mw.instance_eval("cm_zoom_" + k) 
+  end
+  mw.menu.insert_item("zoom_menu.end", "zoom_" + k, a)
+end 
