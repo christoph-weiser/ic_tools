@@ -62,11 +62,10 @@ static Digital_State_t cm_eval_sr_result(Digital_State_t s_input,
 {
     Digital_State_t     output = ZERO;
 
-    cm_message_printf("------");
-    cm_message_printf("s = %i", s_input);
-    cm_message_printf("r = %i", r_input);
-    cm_message_printf("------");
-
+    // cm_message_printf("------");
+    // cm_message_printf("s = %i", s_input);
+    // cm_message_printf("r = %i", r_input);
+    // cm_message_printf("------");
 
     switch (s_input) 
     {
