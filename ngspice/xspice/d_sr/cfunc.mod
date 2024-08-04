@@ -91,7 +91,7 @@ static Digital_State_t cm_eval_sr_result(Digital_State_t s_input,
                     output = ONE;
                     break;
                 case ONE:
-                    output = ZERO;
+                    output = old_output;
                     break;
                 case UNKNOWN:
                     output = ONE;
