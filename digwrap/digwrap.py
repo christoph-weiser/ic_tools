@@ -76,7 +76,7 @@ if __name__ == "__main__":
     s_dac_brige = "adac [{}] [{}] dac_buf"
     s_subckt_digital = ".subckt {} {} {} vdd vss"
 
-    model_adc = ".model adc_buf adc_bridge(in_low = 0.2 in_high=0.8)"
+    model_adc = ".model adc_buf adc_bridge(in_low = 0.9 in_high=1.0)"
     model_dac = ".model dac_buf dac_bridge(out_high = 1.8)"
 
     subckt_wrapper = s_subckt_wrapper.format(name,
