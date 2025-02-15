@@ -18,5 +18,6 @@ file_b="$2"
 [[ -z "$file_a" ]] || [[ -z "$file_b" ]] \
 && echo "Usage: lvs.sh file_a file_b" && exit 0
 
+export NETGEN_COLUMNS=80
 netgen -batch lvs "$file_a" "$file_b" "$IC_TOOLS/lvs/sky130_setup.tcl"
 
