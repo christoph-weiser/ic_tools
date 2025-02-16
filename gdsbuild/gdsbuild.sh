@@ -7,18 +7,17 @@
 #       gdsbuild.sh layout cells
 #
 # DESCRIPTION
-#       build a gds by merging a list of 
-#       cells into the layout top cell. 
-#       This assumes a cells input file, where
-#       all cell.gds files are on a new line.
+#       build a gds by merging cells 
+#       found in the cells directory,
+#       into the layout top cell. 
 #
 #------------------------------------------------------------
 
 script="$IC_TOOLS/gdsbuild/gdsbuild.py"
 
-filename="$1"
-cellsfile="$2"
+topcell="$1"
+cells="$2"
 
 [[ -z "$2" ]] && echo "gdsbuild.sh file cells" && exit
 
-klayout -z -r "$script" -rd filename="$filename" -rd cellsfile="$cellsfile"
+klayout -z -r "$script" -rd topcell="$topcell" -rd cellsdir="$cells"
