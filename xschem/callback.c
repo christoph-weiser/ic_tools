@@ -1280,72 +1280,45 @@ int callback(const char *winpath, int event, int mx, int my, KeySym key,
     }
     break;
    }
-   // if(key == 'j'  && state==0 )                 /* print list of highlight nets */
-   // {
-   //   if(xctx->semaphore >= 2) break;
-   //   print_hilight_net(1);
-   //   break;
-   // }
-   // if(key == 'j'  && state==ControlMask)        /* create ipins from highlight nets */
-   // {
-   //   if(xctx->semaphore >= 2) break;
-   //   print_hilight_net(0);
-   //   break;
-   // }
-   // if(key == 'j'  && state==Mod1Mask)   /* create labels without i prefix from hilight nets */
-   // {
-   //   if(xctx->semaphore >= 2) break;
-   //   print_hilight_net(4);
-   //   break;
-   // }
-   // if(key == 'J'  && state==(Mod1Mask | ShiftMask) ) /* create labels with i prefix from hilight nets */
-   // {
-   //   if(xctx->semaphore >= 2) break;
-   //   print_hilight_net(2);
-   //   break;
-   // }
-   // if(key == 'h'  && state==ControlMask )       /* go to http link */
-   // {
-   //   int savesem = xctx->semaphore;
-   //   xctx->semaphore = 0;
-   //   launcher();
-   //   xctx->semaphore = savesem;
-   //   break;
-   // }
-   // if(key == 'h'  && state==Mod1Mask)   /* create symbol pins from schematic pins 20171208 */
-   // {
-   //   tcleval("schpins_to_sympins");
-   //   break;
-   // }
-   // if(key == 'h' && state == 0) {
-   //   /* horizontally constrained drag 20171023 */
-   //   if ( constrained_move == 1 ) {
-   //     tcleval("set constrained_move 0" );
-   //     constrained_move = 0;
-   //   } else {
-   //     tcleval("set constrained_move 1" );
-   //     constrained_move = 1;
-   //   }
-   //   if(xctx->ui_state & STARTWIRE) {
-   //     if(constrained_move == 1) xctx->mousey_snap = xctx->my_double_save;
-   //     if(constrained_move == 2) xctx->mousex_snap = xctx->mx_double_save;
-   //     new_wire(RUBBER, xctx->mousex_snap, xctx->mousey_snap);
-   //   }
-   //   if(xctx->ui_state & STARTLINE) {
-   //     if(constrained_move == 1) xctx->mousey_snap = xctx->my_double_save;
-   //     if(constrained_move == 2) xctx->mousex_snap = xctx->mx_double_save;
-   //     new_line(RUBBER);
-   //   }
-   //   break;
-   // }
-   // if(key=='H' && state==ShiftMask) {           /* attach labels to selected instances */
-   //   attach_labels_to_inst(1);
-   //   break;
-   // }
-   // if (key == 'H' && state == (ControlMask | ShiftMask)) { /* create schematic and symbol from selected components */
-   //   make_schematic_symbol_from_sel();
-   //   break;
-   // }
+   if(key == 'j')
+   {
+        xctx->yorigin-=CADMOVESTEP*xctx->zoom;
+        draw();
+        redraw_w_a_l_r_p_rubbers();
+        break;
+   }
+   if(key == 'h')
+   {
+        xctx->xorigin-=-CADMOVESTEP*xctx->zoom;
+        draw();
+        redraw_w_a_l_r_p_rubbers();
+        break;
+   }
+   if(key == 'k')
+   {
+        xctx->yorigin-=-CADMOVESTEP*xctx->zoom;
+        draw();
+        redraw_w_a_l_r_p_rubbers();
+        break;
+   }
+   if(key == 'l')
+   {
+        xctx->xorigin-=+CADMOVESTEP*xctx->zoom;
+        draw();
+        redraw_w_a_l_r_p_rubbers();
+        break;
+   }
+   if(key == XK_plus)
+   {
+        view_zoom(0.0);
+        break;
+   }
+   if(key == XK_minus)
+   {
+        view_unzoom(0.0);
+        break;
+   }
+
    if(key == 'v' && state==0) {
      /* vertically constrained drag 20171023 */
      if ( constrained_move == 2 ) {
@@ -1367,15 +1340,6 @@ int callback(const char *winpath, int event, int mx, int my, KeySym key,
      }
      break;
    }
-   // if(key == 'j'  && state == (ControlMask | Mod1Mask) )  /* print list of highlight net with label expansion */
-   // {
-   //   print_hilight_net(3);
-   //   break;
-   // }
-   // if(key == 'J' && state==ShiftMask) {
-   //  create_plot_cmd();
-   //  break;
-   // }
    if(key == '$'  && ( state == ShiftMask) )            /* toggle pixmap  saving */
    {
     xctx->draw_pixmap =!xctx->draw_pixmap;
@@ -1489,7 +1453,7 @@ int callback(const char *winpath, int event, int mx, int my, KeySym key,
     dbg(1, "callback(): zoom_rectangle call\n");
     zoom_rectangle(START);break;
    }
-   if(key==XK_plus)                   /* zoom in */
+   if(key=='Z' && state == ShiftMask)                   /* zoom in */
    {
     view_zoom(0.0); break;
    }
@@ -1564,7 +1528,7 @@ int callback(const char *winpath, int event, int mx, int my, KeySym key,
      tcleval("prev_tab");
      xctx->semaphore = save;
    }
-   if(key=='l' && !(state & ControlMask))   /* left */
+   if(key==XK_Right && !(state & ControlMask))   /* left */
    {
     if(waves_selected(event, key, state, button)) {
       waves_callback(event, mx, my, key, button, aux, state);
@@ -1575,7 +1539,7 @@ int callback(const char *winpath, int event, int mx, int my, KeySym key,
     redraw_w_a_l_r_p_rubbers();
     break;
    }
-   if(key=='h' && !(state & ControlMask))   /* right */
+   if(key==XK_Left && !(state & ControlMask))   /* right */
    {
     if(waves_selected(event, key, state, button)) {
       waves_callback(event, mx, my, key, button, aux, state);
@@ -1586,7 +1550,7 @@ int callback(const char *winpath, int event, int mx, int my, KeySym key,
     redraw_w_a_l_r_p_rubbers();
     break;
    }
-   if(key=='j')                     /* down */
+   if(key==XK_Down)                     /* down */
    {
     if(waves_selected(event, key, state, button)) {
       waves_callback(event, mx, my, key, button, aux, state);
@@ -1597,7 +1561,7 @@ int callback(const char *winpath, int event, int mx, int my, KeySym key,
     redraw_w_a_l_r_p_rubbers();
     break;
    }
-   if(key=='k')                       /* up */
+   if(key==XK_Up)                       /* up */
    {
     if(waves_selected(event, key, state, button)) {
       waves_callback(event, mx, my, key, button, aux, state);
@@ -2075,13 +2039,13 @@ int callback(const char *winpath, int event, int mx, int my, KeySym key,
    }
    if(key=='l' && state == 0) /* start line */
    {
-     int prev_state = xctx->ui_state;
-     start_line(mx, my);
-     if(prev_state == STARTLINE) {
-       tcleval("set constrained_move 0" );
-       constrained_move=0;
-     }
-     break;
+     // int prev_state = xctx->ui_state;
+     // start_line(mx, my);
+     // if(prev_state == STARTLINE) {
+     //   tcleval("set constrained_move 0" );
+     //   constrained_move=0;
+     // }
+     // break;
    }
    if(key=='l' && state == Mod1Mask) {                         /* add pin label*/
      place_net_label(1);
@@ -2371,7 +2335,7 @@ int callback(const char *winpath, int event, int mx, int my, KeySym key,
     zoom_full(1, 0, flags, 0.97);
     break;
    }
-   if(key==XK_minus)                         /* zoom out */
+   if((key=='z' && state==ControlMask))                         /* zoom out */
    {
      view_unzoom(0.0);
      break;
