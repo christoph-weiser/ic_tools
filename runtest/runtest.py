@@ -17,19 +17,22 @@ if __name__ == "__main__":
                         help="config file with case setup")
     parser.add_argument("--cores",
                         type=str,
-                        default=1,
                         help="number of cores for multiprocess")
     parser.add_argument("--simulator",
                         type=str,
-                        default="ngspice",
                         help="which simulator to use (ngspice,xyce)")
                         
     args = parser.parse_args()
 
+    configfile = args.source
 
     cores = int(args.cores)
-    configfile = args.source
+    if not cores:
+        cores = 1
+
     simulator = args.simulator
+    if not simulator:
+        simulator = "ngspice"
 
     cases, paths = spctl.setup(configfile)
   
