@@ -6,6 +6,11 @@ import logging
 import multiprocessing
 import spctl
 
+from spctl.helpers import create_netlist
+from spctl.regression import setup, file_writer, run_cases
+
+
+
 if __name__ == "__main__":
 
     logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
@@ -34,24 +39,24 @@ if __name__ == "__main__":
     if not simulator:
         simulator = "ngspice"
 
-    cases, paths = spctl.setup(configfile)
+    cases, paths = setup(configfile)
   
     paths["file_xschemrc"] = os.getenv("XSCHEMRC")
     paths["path_corners"]  = os.getenv("CORNERS")
 
   
-    paths["file_netlist"] = spctl.create_netlist(paths["file_schematic"],
-                                                 paths["path_netlists"],
-                                                 paths["file_xschemrc"])
+    paths["file_netlist"] = create_netlist(paths["file_schematic"],
+                                           paths["path_netlists"],
+                                           paths["file_xschemrc"])
   
     with multiprocessing.Manager() as manager:
         result_queue = manager.Queue()
-        writer = multiprocessing.Process(target=spctl.file_writer, 
+        writer = multiprocessing.Process(target=file_writer, 
                                          args=(result_queue, 
                                          paths["file_summary"]))
         writer.start()
         with multiprocessing.Pool(processes=cores) as pool:
             args_list = [(paths, c, result_queue, simulator) for c in cases]
-            pool.starmap(spctl.run_cases, args_list)
+            pool.starmap(run_cases, args_list)
         result_queue.put("exit")
         writer.join()
