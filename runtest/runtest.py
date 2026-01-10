@@ -10,7 +10,6 @@ from spctl.helpers import create_netlist
 from spctl.regression import setup, file_writer, run_cases
 
 
-
 if __name__ == "__main__":
 
     logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
@@ -26,15 +25,12 @@ if __name__ == "__main__":
     parser.add_argument("--simulator",
                         type=str,
                         help="which simulator to use (ngspice,xyce)")
-                        
     args = parser.parse_args()
 
     configfile = args.source
-
     cores = int(args.cores)
     if not cores:
         cores = 1
-
     simulator = args.simulator
     if not simulator:
         simulator = "ngspice"
@@ -43,7 +39,6 @@ if __name__ == "__main__":
   
     paths["file_xschemrc"] = os.getenv("XSCHEMRC")
     paths["path_corners"]  = os.getenv("CORNERS")
-
   
     paths["file_netlist"] = create_netlist(paths["file_schematic"],
                                            paths["path_netlists"],
