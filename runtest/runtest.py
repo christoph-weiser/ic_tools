@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-import os
 import argparse
 import logging
 import multiprocessing
+import os
+import shutil
 import spctl
 
 from spctl.helpers import create_netlist
@@ -15,8 +16,11 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
     logger = logging.getLogger(__name__)
 
+    xschemrc = os.getenv("XSCHEMRC")
+    corners  = os.getenv("CORNERS")
+
     parser = argparse.ArgumentParser()
-    parser.add_argument("--source",
+    parser.add_argument("--configfile",
                         type=str,
                         help="config file with case setup")
     parser.add_argument("--cores",
@@ -25,25 +29,48 @@ if __name__ == "__main__":
     parser.add_argument("--simulator",
                         type=str,
                         help="which simulator to use (ngspice,xyce)")
+    parser.add_argument("--netlist",
+                        type=str,
+                        help="netlist file (optional) ")
+
     args = parser.parse_args()
 
-    configfile = args.source
-    cores = int(args.cores)
+    configfile  = args.configfile
+    netlistfile = args.netlist
+    simulator   = args.simulator
+    cores       = args.cores
+
+
     if not cores:
         cores = 1
-    simulator = args.simulator
+    else:
+        cores = int(cores)
     if not simulator:
         simulator = "ngspice"
 
+
     cases, paths = setup(configfile)
-  
-    paths["file_xschemrc"] = os.getenv("XSCHEMRC")
-    paths["path_corners"]  = os.getenv("CORNERS")
-  
-    paths["file_netlist"] = create_netlist(paths["file_schematic"],
-                                           paths["path_netlists"],
-                                           paths["file_xschemrc"])
-  
+    paths["file_configfile"] = configfile
+    paths["file_xschemrc"]   = xschemrc
+    paths["path_corners"]    = corners
+
+
+    if not args.netlist:
+        paths["file_netlist"] = create_netlist(paths["file_schematic"],
+                                               paths["path_netlists"],
+                                               paths["file_xschemrc"])
+    else:
+        src = args.netlist
+        name = os.path.basename(src)
+        dst = "{}/{}".format(paths["path_netlists"], name)
+        shutil.copyfile(src,dst) 
+        paths["file_netlist"] = dst
+
+    logger.info("config:    {}".format(paths["file_configfile"]))
+    logger.info("netlist:   {}".format(paths["file_netlist"]))
+    logger.info("simulator: {}".format(simulator))
+    logger.info("cores:     {}".format(cores))
+
     with multiprocessing.Manager() as manager:
         result_queue = manager.Queue()
         writer = multiprocessing.Process(target=file_writer, 
@@ -51,7 +78,7 @@ if __name__ == "__main__":
                                          paths["file_summary"]))
         writer.start()
         with multiprocessing.Pool(processes=cores) as pool:
-            args_list = [(paths, c, result_queue, simulator) for c in cases]
+            args_list = [(c, result_queue, paths,  simulator) for c in cases]
             pool.starmap(run_cases, args_list)
         result_queue.put("exit")
         writer.join()
