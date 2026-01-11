@@ -10,19 +10,23 @@
 #       initiate a regression test based on 
 #       the setup specified in the config file.
 #
-#       -c,--configfile
+#       -c,--configfile=file
 #           The mandatory configuration file
 #
-#       --cores
+#       --cores=n
 #           The number of physical cores to use
 #
-#       --simulator 
+#       --simulator=simulator
 #           The simulator to run the tests.
 #
-#       --netlist
+#       --netlist=netlist
 #           Netlist to use as base for tests, if 
 #           not the the by default associated 
 #           xschem schematic should be used.
+#
+#       --dryrun
+#           Do not run simulation only output the
+#           cases to be run and logging information.
 #
 #------------------------------------------------------------
 
@@ -47,6 +51,10 @@ while [[ $# -gt 0 ]]; do
             CORES="${1#*=}"
             shift 1
             ;;
+        --dryrun)
+            DRYRUN=true
+            shift 1
+            ;;
         --simulator=*)
             SIMULATOR="${1#*=}"
             shift 1
@@ -68,8 +76,19 @@ if [[ -z "$CONFIG" && ${#POSITIONAL_ARGS[@]} -gt 0 ]]; then
 fi
 
 if [[ -z "$CONFIG" ]]; then
-    echo "runtest.sh configfile [cores] [simulator] [netlist]" && exit
+    echo "runtest.sh configfile [cores] [simulator] [netlist] [dryrun]" && exit
     exit 1
 fi
 
-python "$SCRIPT" --configfile="$CONFIG" --cores="$CORES" --simulator="$SIMULATOR" --netlist="$NETLIST"
+PYTHON_ARGS=(
+    --configfile="$CONFIG"
+    --cores="$CORES"
+    --simulator="$SIMULATOR"
+    --netlist="$NETLIST"
+)
+
+if [ "$DRYRUN" = true ]; then
+    PYTHON_ARGS+=(--dryrun)
+fi
+
+python "$SCRIPT" "${PYTHON_ARGS[@]}"

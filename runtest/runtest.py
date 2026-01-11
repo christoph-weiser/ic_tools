@@ -4,6 +4,7 @@ import argparse
 import logging
 import multiprocessing
 import os
+import sys 
 import shutil
 import spctl
 
@@ -32,6 +33,9 @@ if __name__ == "__main__":
     parser.add_argument("--netlist",
                         type=str,
                         help="netlist file (optional) ")
+    parser.add_argument("--dryrun",
+                        action="store_true",
+                        help="Only output the cases that will be run")
 
     args = parser.parse_args()
 
@@ -39,6 +43,7 @@ if __name__ == "__main__":
     netlistfile = args.netlist
     simulator   = args.simulator
     cores       = args.cores
+    dryrun      = args.dryrun
 
 
     if not cores:
@@ -48,12 +53,11 @@ if __name__ == "__main__":
     if not simulator:
         simulator = "ngspice"
 
-
     cases, paths = setup(configfile)
+
     paths["file_configfile"] = configfile
     paths["file_xschemrc"]   = xschemrc
     paths["path_corners"]    = corners
-
 
     if not args.netlist:
         paths["file_netlist"] = create_netlist(paths["file_schematic"],
@@ -70,6 +74,14 @@ if __name__ == "__main__":
     logger.info("netlist:   {}".format(paths["file_netlist"]))
     logger.info("simulator: {}".format(simulator))
     logger.info("cores:     {}".format(cores))
+    logger.info("--------------------")
+    logger.info("Total Cases: {}".format(len(cases)))
+    logger.info("--------------------")
+    if dryrun:
+        logger.info(cases[0][0])
+        for c in cases:
+            logger.info(c[2])
+        sys.exit()
 
     with multiprocessing.Manager() as manager:
         result_queue = manager.Queue()
