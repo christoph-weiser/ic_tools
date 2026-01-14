@@ -36,6 +36,7 @@ refer to the note at the top of each script.
 ## Tools
 
 - assemble          - prepare gds and extract netlist for lvs.
+- digwrap           - create a wrapper around a digital module
 - drc               - run drc check
 - extract           - netlist extraction for lvs.
 - flatten           - flatten hierachical gds file.
@@ -45,12 +46,11 @@ refer to the note at the top of each script.
 - labelmove         - move content from label layers to pin layers.
 - labelremove       - remove all labels from a gds.
 - lvs               - run lvs check.
+- lvs_pre           - Preprocess a Klayout netlist 
 - merge             - merge two gds files.
+- path2polygon      - convert all gds path to polygon
 - pex               - extract pex netlist from gds.
 - prefix            - add prefix to each cell name in gds.
-- sky130_pnp_mod    - change extracted pnp devices to fit models.
+- runtest           - initiate a regression test
 - topcell           - create a top-cell from hierachical gds.
 - xor               - calculate the xor between two layouts
-
-
-
