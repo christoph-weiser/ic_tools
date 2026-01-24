@@ -57,7 +57,11 @@ if __name__ == "__main__":
 
     paths["file_configfile"] = configfile
     paths["file_xschemrc"]   = xschemrc
-    paths["path_corners"]    = corners
+
+    if simulator in os.listdir(corners):
+        paths["path_corners"] = corners + os.sep + simulator
+    else:
+        paths["path_corners"] = corners
 
     if not args.netlist:
         paths["file_netlist"] = create_netlist(paths["file_schematic"],
@@ -72,6 +76,7 @@ if __name__ == "__main__":
 
     logger.info("config:    {}".format(paths["file_configfile"]))
     logger.info("netlist:   {}".format(paths["file_netlist"]))
+    logger.info("corners:   {}".format(paths["path_corners"]))
     logger.info("simulator: {}".format(simulator))
     logger.info("cores:     {}".format(cores))
     logger.info("--------------------")
