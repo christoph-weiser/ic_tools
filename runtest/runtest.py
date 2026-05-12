@@ -11,10 +11,12 @@ import spctl
 from spctl.helpers import create_netlist
 from spctl.regression import setup, file_writer, run_cases
 
+lform = '[%(asctime)s] %(levelname)s - %(message)s'
+logging.basicConfig(level=logging.INFO, format=lform )
 
 if __name__ == "__main__":
 
-    logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
+    logging.getLogger('spctl').setLevel(logging.WARNING)
     logger = logging.getLogger(__name__)
 
     xschemrc = os.getenv("XSCHEMRC")
