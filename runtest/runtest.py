@@ -11,7 +11,7 @@ import spctl
 from spctl.helpers import create_netlist
 from spctl.regression import setup, file_writer, run_cases
 
-lform = '[%(asctime)s] %(levelname)s - %(message)s'
+lform = '[%(asctime)s] %(levelname)-8s - %(message)s'
 logging.basicConfig(level=logging.INFO, format=lform )
 
 if __name__ == "__main__":
