@@ -18,6 +18,6 @@ file_b="$2"
 [[ -z "$file_a" ]] || [[ -z "$file_b" ]] \
 && echo "Usage: lvs.sh file_a file_b" && exit 0
 
-netgen -batch lvs "$file_a" "$file_b" "$IC_TOOLS/lvs/gf180mcuC_setup.tcl"
+netgen -batch lvs "$file_a" "$file_b" "$IC_TOOLS/lvs/gf180mcuD_setup.tcl"
  
 
