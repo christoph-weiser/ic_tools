@@ -10,6 +10,7 @@ def get_unique_tests(path):
     for elem in os.listdir(path):
         s = (elem.split("_"))[:-1]
         unique_tests.append("_".join(s))
+    unique_tests = list(set(unique_tests))
     return unique_tests
 
 
